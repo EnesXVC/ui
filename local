@@ -3,7 +3,8 @@ local Library = {}
 function Library:CreateWindow(title)
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
-    
+    local UIListLayout = Instance.new("UIListLayout") -- Otomatik sıralama için
+
     ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     MainFrame.Parent = ScreenGui
     MainFrame.Size = UDim2.new(0, 300, 0, 200)
@@ -17,17 +18,22 @@ function Library:CreateWindow(title)
     TitleLabel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-    local Window = {Main = MainFrame}
-    
+    -- Butonları sıralamak için UIListLayout ekleniyor
+    UIListLayout.Parent = MainFrame
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder -- Sıralamayı aktif et
+    UIListLayout.Padding = UDim.new(0, 5) -- Butonlar arasına boşluk ekle
+
+    local Window = {Main = MainFrame, Layout = UIListLayout}
+
     function Window:Button(text, callback)
         local Button = Instance.new("TextButton")
         Button.Parent = MainFrame
         Button.Size = UDim2.new(1, -10, 0, 30)
-        Button.Position = UDim2.new(0, 5, 0, 30)
-        Button.Text = text
         Button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-        
+        Button.Text = text
+        Button.LayoutOrder = #MainFrame:GetChildren() -- Otomatik olarak sıralama yapar
+
         Button.MouseButton1Click:Connect(function()
             callback()
         end)
