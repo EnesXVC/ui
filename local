@@ -66,3 +66,10 @@ function GUI:addButton(tab, buttonName, callback)
     
     return Button
 end
+
+-- Example Usage
+local myWindow = GUI:createWindow("My GUI", UDim2.new(0.1, 0, 0.1, 0), UDim2.new(0, 300, 0, 200))
+local myTab = GUI:createTab(myWindow, "My Tab")
+GUI:addButton(myTab, "Click Me!", function()
+    print("Button clicked!")
+end)
