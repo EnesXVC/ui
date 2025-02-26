@@ -2,87 +2,79 @@ local Library = {}
 
 function Library:CreateWindow(title)
     local ScreenGui = Instance.new("ScreenGui")
-    local MainFrame = Instance.new("Frame")
-    local ToggleButton = Instance.new("TextButton")
-    
-    ScreenGui.Name = "CustomUILibrary"
-    ScreenGui.Parent = game.CoreGui
-    
-    MainFrame.Name = "MainFrame"
-    MainFrame.Parent = ScreenGui
-    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    MainFrame.Size = UDim2.new(0, 300, 0, 200)
-    MainFrame.Position = UDim2.new(0, 10, 0, 10)
-    MainFrame.Active = true
-    MainFrame.Draggable = true
-    
-    local Title = Instance.new("TextLabel")
-    Title.Parent = MainFrame
-    Title.Text = title
-    Title.Size = UDim2.new(1, 0, 0, 30)
-    Title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    
-    ToggleButton.Parent = MainFrame
-    ToggleButton.Size = UDim2.new(0, 30, 0, 30)
-    ToggleButton.Position = UDim2.new(1, -35, 0, 0)
-    ToggleButton.Text = "-"
-    ToggleButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    
-    ToggleButton.MouseButton1Click:Connect(function()
-        MainFrame.Visible = not MainFrame.Visible
-    end)
-    
-    self.MainFrame = MainFrame
-    self.Tabs = {}
-    
-    return self
+    local Window = Instance.new("Frame")
+    local Windowunismi = Instance.new("TextLabel")
+    local Tablargosterkapatmabutonu = Instance.new("TextButton")
+
+    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+    Window.Name = "Window"
+    Window.Parent = ScreenGui
+    Window.BackgroundColor3 = Color3.fromRGB(52, 52, 52)
+    Window.Position = UDim2.new(0.02, 0, 0, 0)
+    Window.Size = UDim2.new(0, 158, 0, 43)
+    Window.Active = true
+    Window.Draggable = true
+
+    Windowunismi.Parent = Window
+    Windowunismi.Size = UDim2.new(0, 101, 0, 36)
+    Windowunismi.Position = UDim2.new(0.08, 0, 0.07, 0)
+    Windowunismi.Text = title
+    Windowunismi.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+
+    Tablargosterkapatmabutonu.Parent = Window
+    Tablargosterkapatmabutonu.Size = UDim2.new(0, 25, 0, 31)
+    Tablargosterkapatmabutonu.Position = UDim2.new(0.79, 0, 0.19, 0)
+    Tablargosterkapatmabutonu.Text = "☰"
+
+    local self = {
+        Window = Window,
+        Tabs = {},
+        TabButton = Tablargosterkapatmabutonu
+    }
+
+    function Tablargosterkapatmabutonu.MouseButton1Click:Connect()
+        for _, tab in pairs(self.Tabs) do
+            tab.Visible = not tab.Visible
+        end
+    end
+
+    return setmetatable(self, { __index = Library })
 end
 
 function Library:CreateTab(tabName)
     local Tab = Instance.new("Frame")
-    Tab.Parent = self.MainFrame
     Tab.Name = tabName
-    Tab.Size = UDim2.new(1, 0, 0, 170)
-    Tab.Position = UDim2.new(0, 0, 0, 30)
-    Tab.BackgroundTransparency = 1
-    Tab.Visible = #self.Tabs == 0
-    
-    local TabButton = Instance.new("TextButton")
-    TabButton.Parent = self.MainFrame
-    TabButton.Size = UDim2.new(0, 80, 0, 30)
-    TabButton.Position = UDim2.new(0, 10 + (#self.Tabs * 85), 1, -35)
-    TabButton.Text = tabName
-    TabButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    
-    TabButton.MouseButton1Click:Connect(function()
-        for _, t in pairs(self.Tabs) do
-            t.Visible = false
-        end
-        Tab.Visible = true
-    end)
-    
+    Tab.Parent = self.Window
+    Tab.Size = UDim2.new(0, 158, 0, 35)
+    Tab.Position = UDim2.new(0, 0, 1, 0)
+    Tab.BackgroundColor3 = Color3.fromRGB(77, 77, 77)
+    Tab.Visible = false
+
+    local tabnismi = Instance.new("TextLabel")
+    tabnismi.Parent = Tab
+    tabnismi.Size = UDim2.new(0, 100, 0, 29)
+    tabnismi.Position = UDim2.new(0.08, 0, 0.08, 0)
+    tabnismi.Text = tabName
+    tabnismi.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+
     self.Tabs[tabName] = Tab
-    
     return Tab
 end
 
 function Library:AddButton(tabName, buttonText, callback)
     local Tab = self.Tabs[tabName]
     if not Tab then return end
-    
+
     local Button = Instance.new("TextButton")
     Button.Parent = Tab
-    Button.Size = UDim2.new(1, -20, 0, 30)
-    Button.Position = UDim2.new(0, 10, 0, #Tab:GetChildren() * 35)
+    Button.Size = UDim2.new(0, 158, 0, 30)
+    Button.Position = UDim2.new(0, 0, (#Tab:GetChildren() - 1) * 0.3, 0)
     Button.Text = buttonText
-    Button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    
+    Button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+
     Button.MouseButton1Click:Connect(callback)
-    
+
     return Button
 end
 
