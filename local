@@ -1,81 +1,68 @@
-local Library = {}
+-- GUI Library
 
-function Library:CreateWindow(title)
+local GUI = {}
+
+function GUI:createWindow(title, position, size)
     local ScreenGui = Instance.new("ScreenGui")
     local Window = Instance.new("Frame")
-    local Windowunismi = Instance.new("TextLabel")
-    local Tablargosterkapatmabutonu = Instance.new("TextButton")
-
+    
     ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    
     Window.Name = "Window"
     Window.Parent = ScreenGui
     Window.BackgroundColor3 = Color3.fromRGB(52, 52, 52)
-    Window.Position = UDim2.new(0.02, 0, 0, 0)
-    Window.Size = UDim2.new(0, 158, 0, 43)
-    Window.Active = true
-    Window.Draggable = true
+    Window.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Window.Position = position
+    Window.Size = size
 
-    Windowunismi.Parent = Window
-    Windowunismi.Size = UDim2.new(0, 101, 0, 36)
-    Windowunismi.Position = UDim2.new(0.08, 0, 0.07, 0)
-    Windowunismi.Text = title
-    Windowunismi.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-
-    Tablargosterkapatmabutonu.Parent = Window
-    Tablargosterkapatmabutonu.Size = UDim2.new(0, 25, 0, 31)
-    Tablargosterkapatmabutonu.Position = UDim2.new(0.79, 0, 0.19, 0)
-    Tablargosterkapatmabutonu.Text = "☰"
-
-    local self = {
-        Window = Window,
-        Tabs = {},
-        TabButton = Tablargosterkapatmabutonu
-    }
-
-    function Tablargosterkapatmabutonu.MouseButton1Click:Connect()
-        for _, tab in pairs(self.Tabs) do
-            tab.Visible = not tab.Visible
-        end
-    end
-
-    return setmetatable(self, { __index = Library })
+    local WindowTitle = Instance.new("TextLabel")
+    WindowTitle.Name = "WindowTitle"
+    WindowTitle.Parent = Window
+    WindowTitle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    WindowTitle.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    WindowTitle.Position = UDim2.new(0.05, 0, 0.05, 0)
+    WindowTitle.Size = UDim2.new(0, 100, 0, 30)
+    WindowTitle.Font = Enum.Font.SourceSans
+    WindowTitle.TextColor3 = Color3.fromRGB(0, 0, 0)
+    WindowTitle.TextSize = 14
+    WindowTitle.Text = title
+    
+    return Window
 end
 
-function Library:CreateTab(tabName)
+function GUI:createTab(window, tabName)
     local Tab = Instance.new("Frame")
-    Tab.Name = tabName
-    Tab.Parent = self.Window
-    Tab.Size = UDim2.new(0, 158, 0, 35)
-    Tab.Position = UDim2.new(0, 0, 1, 0)
+    Tab.Parent = window
     Tab.BackgroundColor3 = Color3.fromRGB(77, 77, 77)
-    Tab.Visible = false
+    Tab.Position = UDim2.new(0, 0, 0.85, 0)
+    Tab.Size = UDim2.new(1, 0, 0.2, 0)
 
-    local tabnismi = Instance.new("TextLabel")
-    tabnismi.Parent = Tab
-    tabnismi.Size = UDim2.new(0, 100, 0, 29)
-    tabnismi.Position = UDim2.new(0.08, 0, 0.08, 0)
-    tabnismi.Text = tabName
-    tabnismi.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    local TabLabel = Instance.new("TextLabel")
+    TabLabel.Name = "TabLabel"
+    TabLabel.Parent = Tab
+    TabLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TabLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    TabLabel.Size = UDim2.new(0.5, 0, 1, 0)
+    TabLabel.Font = Enum.Font.SourceSans
+    TabLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+    TabLabel.TextSize = 14
+    TabLabel.Text = tabName
 
-    self.Tabs[tabName] = Tab
     return Tab
 end
 
-function Library:AddButton(tabName, buttonText, callback)
-    local Tab = self.Tabs[tabName]
-    if not Tab then return end
-
+function GUI:addButton(tab, buttonName, callback)
     local Button = Instance.new("TextButton")
-    Button.Parent = Tab
-    Button.Size = UDim2.new(0, 158, 0, 30)
-    Button.Position = UDim2.new(0, 0, (#Tab:GetChildren() - 1) * 0.3, 0)
-    Button.Text = buttonText
+    Button.Parent = tab
     Button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-
+    Button.Size = UDim2.new(1, 0, 0.2, 0)
+    Button.Font = Enum.Font.SourceSans
+    Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+    Button.TextSize = 14
+    Button.Text = buttonName
+    
     Button.MouseButton1Click:Connect(callback)
-
+    
     return Button
 end
-
-return Library
